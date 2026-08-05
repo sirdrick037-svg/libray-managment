@@ -1,10 +1,10 @@
-# 📚 Library Management System
+#  Library Management System
 
 A simple web-based **Library Management System** built using **HTML**, **Tailwind CSS**, and **JavaScript**. The application allows users to register, log in, and manage books efficiently through an easy-to-use interface.
 
 ---
 
-## 🚀 Features
+##  Features
 
 - User Registration
 - User Login and Logout
@@ -19,7 +19,7 @@ A simple web-based **Library Management System** built using **HTML**, **Tailwin
 
 ---
 
-## 🛠 Technologies Used
+##  Technologies Used
 
 - HTML5
 - Tailwind CSS
@@ -29,7 +29,7 @@ A simple web-based **Library Management System** built using **HTML**, **Tailwin
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Library-Management-System/
@@ -45,7 +45,7 @@ Library-Management-System/
 
 ---
 
-## 📖 How to Use
+##  How to Use
 
 ### 1. Register
 
@@ -76,7 +76,7 @@ You can:
 
 ---
 
-## 📚 Open Library API
+##  Open Library API
 
 This project uses the Open Library Search API.
 
@@ -92,7 +92,7 @@ The API is used to automatically retrieve:
 
 ---
 
-## 📊 Main Features
+##  Main Features
 
 - Register new users
 - Secure login using Local Storage
@@ -105,7 +105,7 @@ The API is used to automatically retrieve:
 
 ---
 
-## 🔄 CRUD Operations
+##  CRUD Operations
 
 ### Create
 - Add a new book to the library.
@@ -122,7 +122,7 @@ The API is used to automatically retrieve:
 
 ---
 
-## 📈 Future Improvements
+##  Future Improvements
 
 - Database integration (MySQL or Firebase)
 - ISBN barcode scanner
@@ -134,7 +134,7 @@ The API is used to automatically retrieve:
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Name:** CEDRICK NGIGE
 
@@ -144,6 +144,6 @@ Institution: ZINDUA SCHOOL
 
 ---
 
-## 📄 License
+##  License
 
 This project was developed for educational purposes.
