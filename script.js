@@ -1,11 +1,7 @@
+// Redirect to login if user is not logged in
 if (localStorage.getItem("loggedIn") !== "true") {
-
-    window.location.href = "login.html";
-
+  window.location.href = "login.html";
 }
-
-const API_URL = "http://localhost:3000/books";
-
 
 const bookForm = document.getElementById("bookForm");
 const bookList = document.getElementById("bookList");
@@ -19,22 +15,20 @@ const availableBooks = document.getElementById("availableBooks");
 const borrowedBooks = document.getElementById("borrowedBooks");
 
 const clearLibrary = document.getElementById("clearLibrary");
+const logoutBtn = document.getElementById("logoutBtn");
 
-let books = [];
+let books = JSON.parse(localStorage.getItem("books")) || [];
 
-window.onload = loadBooks;
-
-async function loadBooks() {
-  const response = await fetch(API_URL);
-
-  books = await response.json();
-
+// Load books when page opens
+window.onload = () => {
   displayBooks(books);
-}
+};
+
+// ---------------- DISPLAY BOOKS ----------------
 function displayBooks(bookArray) {
   bookList.innerHTML = "";
 
-  bookArray.forEach((book) => {
+  bookArray.forEach((book, index) => {
     const row = document.createElement("tr");
 
     row.innerHTML = `
@@ -48,24 +42,20 @@ function displayBooks(bookArray) {
 
                 <button
                     class="bg-blue-500 text-white px-2 py-1 rounded"
-                    onclick="editBook(${book.id})">
+                    onclick="editBook(${index})">
                     Edit
                 </button>
 
                 <button
                     class="bg-yellow-500 text-white px-2 py-1 rounded"
-                    onclick="toggleStatus(${book.id})">
-
+                    onclick="toggleStatus(${index})">
                     ${book.status === "Available" ? "Borrow" : "Return"}
-
                 </button>
 
                 <button
                     class="bg-red-500 text-white px-2 py-1 rounded"
-                    onclick="deleteBook(${book.id})">
-
+                    onclick="deleteBook(${index})">
                     Delete
-
                 </button>
 
             </td>
@@ -76,95 +66,74 @@ function displayBooks(bookArray) {
 
   updateSummary();
 }
-bookForm.addEventListener("submit", async function (e) {
+
+// ---------------- SAVE BOOKS ----------------
+function saveBooks() {
+  localStorage.setItem("books", JSON.stringify(books));
+}
+
+// ---------------- ADD BOOK ----------------
+bookForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
   const newBook = {
     bookId: document.getElementById("bookId").value,
     title: document.getElementById("title").value,
     author: document.getElementById("author").value,
-    category:document.getElementById("category").value,
+    category: document.getElementById("category").value,
     status: document.getElementById("status").value,
   };
 
- books.push(newBook);
+  books.push(newBook);
 
-localStorage.setItem("books", JSON.stringify(books));
+  saveBooks();
 
-displayBooks(books);
-
-bookForm.reset();
-
-    headers: {
-      "Content-Type": "application/json",
-    },
-
-    body: JSON.stringify(newBook),
-  });
+  displayBooks(books);
 
   bookForm.reset();
-
-  loadBooks();
 });
-async function deleteBook(id) {
-  await fetch(`${API_URL}/${id}`, {
-    method: "DELETE",
-  });
 
-  loadBooks();
+// ---------------- DELETE ----------------
+function deleteBook(index) {
+  books.splice(index, 1);
+
+  saveBooks();
+
+  displayBooks(books);
 }
 
-async function editBook(id) {
-  const book = books.find((b) => b.id === id);
+// ---------------- EDIT ----------------
+function editBook(index) {
+  const book = books[index];
 
   const title = prompt("Title", book.title);
-
   const author = prompt("Author", book.author);
-
   const bookId = prompt("Book ID", book.bookId);
-
   const category = prompt("Category", book.category);
 
-  if (title && author && bookId && category) {
-    await fetch(`${API_URL}/${id}`, {
-      method: "PUT",
+  if (!title || !author || !bookId || !category) return;
 
-      headers: {
-        "Content-Type": "application/json",
-      },
+  book.title = title;
+  book.author = author;
+  book.bookId = bookId;
+  book.category = category;
 
-      body: JSON.stringify({
-        ...book,
+  saveBooks();
 
-        title,
-        author,
-        bookId,
-        category
-      }),
-    });
-
-    loadBooks();
-  }
+  displayBooks(books);
 }
-async function toggleStatus(id) {
-  const book = books.find((b) => b.id === id);
 
-  const newStatus = book.status === "Available" ? "Borrowed" : "Available";
+// ---------------- BORROW / RETURN ----------------
+function toggleStatus(index) {
+  books[index].status =
+    books[index].status === "Available" ? "Borrowed" : "Available";
 
-  await fetch(`${API_URL}/${id}`, {
-    method: "PATCH",
+  saveBooks();
 
-    headers: {
-      "Content-Type": "application/json",
-    },
-
-    body: JSON.stringify({
-      status: newStatus,
-    }),
-  });
-
-  loadBooks();
+  displayBooks(books);
 }
+
+// ---------------- SEARCH ----------------
 searchBook.addEventListener("keyup", function () {
   const search = this.value.toLowerCase();
 
@@ -172,22 +141,13 @@ searchBook.addEventListener("keyup", function () {
     (book) =>
       book.title.toLowerCase().includes(search) ||
       book.author.toLowerCase().includes(search) ||
-      book.category.toLowerCase().includes(search)
+      book.category.toLowerCase().includes(search),
   );
 
   displayBooks(filtered);
 });
 
-const logoutBtn = document.getElementById("logoutBtn");
-
-logoutBtn.addEventListener("click", () => {
-
-    localStorage.removeItem("loggedIn");
-
-    window.location.href = "login.html";
-
-});
-
+// ---------------- SUMMARY ----------------
 function updateSummary() {
   totalBooks.textContent = books.length;
 
@@ -200,71 +160,71 @@ function updateSummary() {
   ).length;
 }
 
-clearLibrary.addEventListener("click", async () => {
+// ---------------- CLEAR LIBRARY ----------------
+clearLibrary.addEventListener("click", () => {
   if (!confirm("Delete all books?")) return;
 
-  for (const book of books) {
-    await fetch(`${API_URL}/${book.id}`, {
-      method: "DELETE",
-    });
+  books = [];
+
+  saveBooks();
+
+  displayBooks(books);
+});
+
+// ---------------- LOGOUT ----------------
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("loggedIn");
+
+  window.location.href = "login.html";
+});
+
+// ---------------- OPEN LIBRARY API ----------------
+searchApiBtn.addEventListener("click", async () => {
+  const title = apiSearch.value.trim();
+
+  if (!title) {
+    alert("Please enter a book title.");
+    return;
   }
 
-  loadBooks();
-});
-searchApiBtn.addEventListener("click", async () => {
-
-    const title = apiSearch.value.trim();
-
-    if (!title) {
-        alert("Please enter a book title.");
-        return;
-    }
-
+  try {
     const response = await fetch(
-        `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}`
+      `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}`,
     );
 
     const data = await response.json();
 
     if (data.docs.length === 0) {
-        alert("Book not found.");
-        return;
+      alert("Book not found.");
+      return;
     }
 
     const book = data.docs[0];
 
     document.getElementById("title").value = book.title || "";
 
-    document.getElementById("author").value =
-        book.author_name ? book.author_name[0] : "";
-
+    document.getElementById("author").value = book.author_name
+      ? book.author_name[0]
+      : "";
 
     if (book.subject && book.subject.length > 0) {
+      const subject = book.subject[0];
 
-        const subject = book.subject[0];
-
-        if (subject.includes("Science")) {
-
-            document.getElementById("category").value = "Science";
-
-        } else if (subject.includes("History")) {
-
-            document.getElementById("category").value = "History";
-
-        } else if (subject.includes("Technology")) {
-
-            document.getElementById("category").value = "Technology";
-
-        } else if (subject.includes("Biography")) {
-
-            document.getElementById("category").value = "Biography";
-
-        } else {
-
-            document.getElementById("category").value = "Fiction";
-
-        }
-
+      if (subject.includes("Science")) {
+        document.getElementById("category").value = "Science";
+      } else if (subject.includes("History")) {
+        document.getElementById("category").value = "History";
+      } else if (subject.includes("Technology")) {
+        document.getElementById("category").value = "Technology";
+      } else if (subject.includes("Biography")) {
+        document.getElementById("category").value = "Biography";
+      } else if (subject.includes("Children")) {
+        document.getElementById("category").value = "Children";
+      } else {
+        document.getElementById("category").value = "Fiction";
+      }
     }
-
+  } catch (error) {
+    alert("Unable to connect to Open Library API.");
+  }
 });
