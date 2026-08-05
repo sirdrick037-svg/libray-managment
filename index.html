@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+      <h1 class="text-3xl font-bold text-center mb-6">
+        Library Management System
+      </h1>
+
+    <button
+    id="logoutBtn"
+    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4"
+>
+    Logout
+</button>  
+      <div class="mb-6 flex gap-2">
+
+    <input
+        type="text"
+        id="apiSearch"
+        placeholder="Search a book online..."
+        class="flex-1 border rounded p-2"
+    >
+
+    <button
+        id="searchApiBtn"
+        type="button"
+        class="bg-green-500 text-white px-4 rounded hover:bg-green-600"
+    >
+        Search
+    </button>
+
+</div>
+
+      <form id="bookForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          id="title"
+          placeholder="Book Title"
+          class="border rounded p-2"
+          required
+        />
+
+        <input
+          type="text"
+          id="author"
+          placeholder="Author Name"
+          class="border rounded p-2"
+          required
+        />
+
+        <input
+        type="text"
+        id="bookId"
+        placeholder="Book ID (e.g. BK001)"
+        class="border rounded p-2"
+        required
+        />
+
+<select id="category" class="border rounded p-2" required>
+    <option value="">Select Category</option>
+    <option value="Fiction">Fiction</option>
+    <option value="Science">Science</option>
+    <option value="Technology">Technology</option>
+    <option value="History">History</option>
+    <option value="Biography">Biography</option>
+    <option value="Children">Children</option>
+</select>
+    
+
+
+        <select id="status" class="border rounded p-2">
+          <option value="Available">Available</option>
+          <option value="Borrowed">Borrowed</option>
+        </select>
+
+        <button
+          type="submit"
+          class="md:col-span-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        >
+          Add Book
+        </button>
+      </form>
+
+    <input
+  type="text"
+  id="searchBook"
+  placeholder="Search by title, author or category..."
+  class="w-full mt-6 border rounded p-2"
+/>
+
+      <div class="overflow-x-auto mt-6">
+        <table class="w-full border border-gray-300">
+          <thead class="bg-blue-500 text-white">
+            <tr>
+              <th class="p-3">Book ID</th>
+              <th class="p-3">Title</th>
+              <th class="p-3">Author</th>
+              <th class="p-3">category</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="bookList"></tbody>
+        </table>
+      </div>
+
+      <div class="mt-6 flex justify-between text-lg font-semibold">
+        <p>Total Books: <span id="totalBooks">0</span></p>
+
+        <p>Available: <span id="availableBooks">0</span></p>
+
+        <p>Borrowed: <span id="borrowedBooks">0</span></p>
+      </div>
+
+      <button
+        id="clearLibrary"
+        class="w-full mt-6 bg-red-500 text-white p-2 rounded hover:bg-red-600"
+      >
+        Clear Library
+      </button>
+
+ 
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
