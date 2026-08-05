@@ -16,30 +16,22 @@
         Library Management System
       </h1>
 
-    <button
-    id="logoutBtn"
-    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4"
->
-    Logout
-</button>  
       <div class="mb-6 flex gap-2">
+        <input
+          type="text"
+          id="apiSearch"
+          placeholder="Search a book online..."
+          class="flex-1 border rounded p-2"
+        />
 
-    <input
-        type="text"
-        id="apiSearch"
-        placeholder="Search a book online..."
-        class="flex-1 border rounded p-2"
-    >
-
-    <button
-        id="searchApiBtn"
-        type="button"
-        class="bg-green-500 text-white px-4 rounded hover:bg-green-600"
-    >
-        Search
-    </button>
-
-</div>
+        <button
+          id="searchApiBtn"
+          type="button"
+          class="bg-green-500 text-white px-4 rounded hover:bg-green-600"
+        >
+          Search
+        </button>
+      </div>
 
       <form id="bookForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
@@ -59,24 +51,22 @@
         />
 
         <input
-        type="text"
-        id="bookId"
-        placeholder="Book ID (e.g. BK001)"
-        class="border rounded p-2"
-        required
+          type="text"
+          id="bookId"
+          placeholder="Book ID (e.g. BK001)"
+          class="border rounded p-2"
+          required
         />
 
-<select id="category" class="border rounded p-2" required>
-    <option value="">Select Category</option>
-    <option value="Fiction">Fiction</option>
-    <option value="Science">Science</option>
-    <option value="Technology">Technology</option>
-    <option value="History">History</option>
-    <option value="Biography">Biography</option>
-    <option value="Children">Children</option>
-</select>
-    
-
+        <select id="category" class="border rounded p-2" required>
+          <option value="">Select Category</option>
+          <option value="Fiction">Fiction</option>
+          <option value="Science">Science</option>
+          <option value="Technology">Technology</option>
+          <option value="History">History</option>
+          <option value="Biography">Biography</option>
+          <option value="Children">Children</option>
+        </select>
 
         <select id="status" class="border rounded p-2">
           <option value="Available">Available</option>
@@ -91,12 +81,12 @@
         </button>
       </form>
 
-    <input
-  type="text"
-  id="searchBook"
-  placeholder="Search by title, author or category..."
-  class="w-full mt-6 border rounded p-2"
-/>
+      <input
+        type="text"
+        id="searchBook"
+        placeholder="Search by title, author or category..."
+        class="w-full mt-6 border rounded p-2"
+      />
 
       <div class="overflow-x-auto mt-6">
         <table class="w-full border border-gray-300">
@@ -129,8 +119,12 @@
       >
         Clear Library
       </button>
-
- 
+      <button
+        id="logoutBtn"
+        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4"
+      >
+        Logout
+      </button>
     </div>
 
     <script src="script.js"></script>
