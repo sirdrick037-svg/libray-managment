@@ -1,4 +1,4 @@
-// Redirect to login if user is not logged in
+
 if (localStorage.getItem("loggedIn") !== "true") {
   window.location.href = "login.html";
 }
@@ -19,12 +19,10 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 let books = JSON.parse(localStorage.getItem("books")) || [];
 
-// Load books when page opens
+
 window.onload = () => {
   displayBooks(books);
 };
-
-// ---------------- DISPLAY BOOKS ----------------
 function displayBooks(bookArray) {
   bookList.innerHTML = "";
 
@@ -67,12 +65,12 @@ function displayBooks(bookArray) {
   updateSummary();
 }
 
-// ---------------- SAVE BOOKS ----------------
+
 function saveBooks() {
   localStorage.setItem("books", JSON.stringify(books));
 }
 
-// ---------------- ADD BOOK ----------------
+
 bookForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -93,7 +91,7 @@ bookForm.addEventListener("submit", function (e) {
   bookForm.reset();
 });
 
-// ---------------- DELETE ----------------
+
 function deleteBook(index) {
   books.splice(index, 1);
 
@@ -102,7 +100,6 @@ function deleteBook(index) {
   displayBooks(books);
 }
 
-// ---------------- EDIT ----------------
 function editBook(index) {
   const book = books[index];
 
@@ -123,7 +120,6 @@ function editBook(index) {
   displayBooks(books);
 }
 
-// ---------------- BORROW / RETURN ----------------
 function toggleStatus(index) {
   books[index].status =
     books[index].status === "Available" ? "Borrowed" : "Available";
@@ -133,7 +129,7 @@ function toggleStatus(index) {
   displayBooks(books);
 }
 
-// ---------------- SEARCH ----------------
+
 searchBook.addEventListener("keyup", function () {
   const search = this.value.toLowerCase();
 
@@ -147,7 +143,7 @@ searchBook.addEventListener("keyup", function () {
   displayBooks(filtered);
 });
 
-// ---------------- SUMMARY ----------------
+
 function updateSummary() {
   totalBooks.textContent = books.length;
 
@@ -160,7 +156,7 @@ function updateSummary() {
   ).length;
 }
 
-// ---------------- CLEAR LIBRARY ----------------
+
 clearLibrary.addEventListener("click", () => {
   if (!confirm("Delete all books?")) return;
 
@@ -171,14 +167,13 @@ clearLibrary.addEventListener("click", () => {
   displayBooks(books);
 });
 
-// ---------------- LOGOUT ----------------
+
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("loggedIn");
 
   window.location.href = "login.html";
 });
 
-// ---------------- OPEN LIBRARY API ----------------
 searchApiBtn.addEventListener("click", async () => {
   const title = apiSearch.value.trim();
 
