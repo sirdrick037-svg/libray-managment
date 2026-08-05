@@ -60,14 +60,3 @@ function login() {
     }
 
 }
-
-  if (user) {
-    localStorage.setItem("loggedIn", "true");
-    localStorage.setItem("currentUser", username);
-
-    window.location.href = "index.html";
-  } else {
-    document.getElementById("message").textContent =
-      "Invalid username or password.";
-  }
-}
