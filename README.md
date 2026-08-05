@@ -136,11 +136,11 @@ The API is used to automatically retrieve:
 
 ## 👨‍💻 Author
 
-**Name:** Your Name
+**Name:** CEDRICK NGIGE
 
 Course: JavaScript Programming
 
-Institution: Your School/College
+Institution: ZINDUA SCHOOL
 
 ---
 
