@@ -87,8 +87,13 @@ bookForm.addEventListener("submit", async function (e) {
     status: document.getElementById("status").value,
   };
 
-  await fetch(API_URL, {
-    method: "POST",
+ books.push(newBook);
+
+localStorage.setItem("books", JSON.stringify(books));
+
+displayBooks(books);
+
+bookForm.reset();
 
     headers: {
       "Content-Type": "application/json",
