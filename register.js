@@ -6,6 +6,22 @@ function register() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
+  
+const usernamePattern = /^[A-Za-z]+$/;
+const passwordPattern = /^[A-Za-z0-9]{6,}$/;
+
+if (!usernamePattern.test(username)) {
+    document.getElementById("message").textContent =
+        "Username must contain letters only.";
+    return;
+}
+
+if (!passwordPattern.test(password)) {
+    document.getElementById("message").textContent =
+        "Password must contain only letters and numbers and be at least 6 characters.";
+    return;
+}
+
   if (!username || !password) {
     alert("Please fill in all fields.");
     return;
