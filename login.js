@@ -4,7 +4,9 @@ if (!localStorage.getItem("users")) {
     const defaultUsers = [
         {
             username: "admin",
-            password: "1234"
+            password: "1234",
+            role: "admin",
+
         }
     ];
 
@@ -48,7 +50,7 @@ function login() {
     if (user) {
 
         localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("currentUser", username);
+        localStorage.setItem("currentUser", JSON.stringify(user));
 
         window.location.href = "index.html";
 

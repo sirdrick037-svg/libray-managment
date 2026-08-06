@@ -39,7 +39,10 @@ if (!passwordPattern.test(password)) {
   users.push({
     username,
     password,
+    role: "user",
   });
+
+  users.push(newUser);  
 
   localStorage.setItem("users", JSON.stringify(users));
 

@@ -17,6 +17,26 @@ const borrowedBooks = document.getElementById("borrowedBooks");
 const clearLibrary = document.getElementById("clearLibrary");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+const adminBtn = document.getElementById("adminBtn");
+
+if (currentUser.role === "admin") {
+
+    adminBtn.style.display = "block";
+
+} else {
+
+    adminBtn.style.display = "none";
+
+}
+
+adminBtn.addEventListener("click", () => {
+
+    window.location.href = "admin.html";
+
+});
+
 let books = JSON.parse(localStorage.getItem("books")) || [];
 
 
