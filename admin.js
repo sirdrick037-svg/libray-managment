@@ -1,6 +1,18 @@
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-if (!currentUser || currentUser.role !== "admin") {
+console.log(currentUser);
+
+alert(JSON.stringify(currentUser));
+
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+if (!currentUser) {
+
+    window.location.href = "login.html";
+
+}
+
+if (currentUser.role !== "admin") {
 
     alert("Access Denied!");
 
@@ -8,11 +20,9 @@ if (!currentUser || currentUser.role !== "admin") {
 
 }
 
-let books = JSON.parse(localStorage.getItem("books")) || [];
+const books = JSON.parse(localStorage.getItem("books")) || [];
 
-let users = JSON.parse(localStorage.getItem("users")) || [];
-
-
+const users = JSON.parse(localStorage.getItem("users")) || [];
 
 document.getElementById("totalBooks").textContent = books.length;
 
@@ -22,33 +32,14 @@ books.filter(book => book.status === "Available").length;
 document.getElementById("borrowedBooks").textContent =
 books.filter(book => book.status === "Borrowed").length;
 
-
-
-
 const userTable = document.getElementById("userTable");
 
-users.forEach((user, index) => {
+users.forEach(user => {
 
     const row = document.createElement("tr");
 
     row.innerHTML = `
-
         <td class="border p-2">${user.username}</td>
-
-        <td class="border p-2">${user.role}</td>
-
-        <td class="border p-2">
-
-            <button
-            onclick="deleteUser(${index})"
-            class="bg-red-500 text-white px-3 py-1 rounded">
-
-            Delete
-
-            </button>
-
-        </td>
-
     `;
 
     userTable.appendChild(row);

@@ -3,50 +3,33 @@ const registerBtn = document.getElementById("registerBtn");
 registerBtn.addEventListener("click", register);
 
 function register() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
 
-  
-const usernamePattern = /^[A-Za-z]+$/;
-const passwordPattern = /^[A-Za-z0-9]{6,}$/;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-if (!usernamePattern.test(username)) {
-    document.getElementById("message").textContent =
-        "Username must contain letters only.";
-    return;
-}
+    if (username === "" || password === "") {
+        alert("Please fill in all fields.");
+        return;
+    }
 
-if (!passwordPattern.test(password)) {
-    document.getElementById("message").textContent =
-        "Password must contain only letters and numbers and be at least 6 characters.";
-    return;
-}
+    let users = JSON.parse(localStorage.getItem("users")) || [];
 
-  if (!username || !password) {
-    alert("Please fill in all fields.");
-    return;
-  }
+    if (users.find(user => user.username === username)) {
+        alert("Username already exists.");
+        return;
+    }
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+    const newUser = {
+        username: username,
+        password: password,
+        role: "user"
+    };
 
-  const exists = users.find((user) => user.username === username);
+    users.push(newUser);
 
-  if (exists) {
-    alert("Username already exists.");
-    return;
-  }
+    localStorage.setItem("users", JSON.stringify(users));
 
-  users.push({
-    username,
-    password,
-    role: "user",
-  });
+    alert("Registration successful!");
 
-  users.push(newUser);  
-
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Registration successful!");
-
-  window.location.href = "login.html";
+    window.location.href = "login.html";
 }

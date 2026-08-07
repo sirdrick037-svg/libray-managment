@@ -5,7 +5,7 @@ if (!localStorage.getItem("users")) {
         {
             username: "admin",
             password: "1234",
-            role: "admin",
+            role: "admin"
 
         }
     ];
@@ -23,10 +23,10 @@ function login() {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    // Username: letters only
+    
     const usernamePattern = /^[A-Za-z]+$/;
 
-    // Password: letters and numbers only
+    
     const passwordPattern = /^[A-Za-z0-9]+$/;
 
     if (!usernamePattern.test(username)) {
