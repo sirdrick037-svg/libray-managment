@@ -1,35 +1,39 @@
 const registerBtn = document.getElementById("registerBtn");
 
-registerBtn.addEventListener("click", register);
+registerBtn.addEventListener("click", () => {
+  const username = document.getElementById("username").value.trim();
 
-function register() {
+  const password = document.getElementById("password").value.trim();
 
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
+  if (!username || !password) {
+    alert("Please fill in all fields.");
 
-    if (username === "" || password === "") {
-        alert("Please fill in all fields.");
-        return;
-    }
+    return;
+  }
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (users.find(user => user.username === username)) {
-        alert("Username already exists.");
-        return;
-    }
+  const exists = users.some((user) => user.username === username);
 
-    const newUser = {
-        username: username,
-        password: password,
-        role: "user"
-    };
+  if (exists) {
+    alert("Username already exists.");
 
-    users.push(newUser);
+    return;
+  }
 
-    localStorage.setItem("users", JSON.stringify(users));
+  const newUser = {
+    username: username,
 
-    alert("Registration successful!");
+    password: password,
 
-    window.location.href = "login.html";
-}
+    approved: false,
+  };
+
+  users.push(newUser);
+
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Registration successful. Please wait for admin approval.");
+
+  window.location.href = "user-login.html";
+});

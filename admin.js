@@ -1,123 +1,97 @@
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-console.log(currentUser);
-
-alert(JSON.stringify(currentUser));
-
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-if (!currentUser) {
-
-    window.location.href = "login.html";
-
-}
-
-if (currentUser.role !== "admin") {
-
-    alert("Access Denied!");
-
-    window.location.href = "index.html";
-
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+  window.location.href = "admin-login.html";
 }
 
 const books = JSON.parse(localStorage.getItem("books")) || [];
 
-const users = JSON.parse(localStorage.getItem("users")) || [];
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
 
 document.getElementById("totalBooks").textContent = books.length;
 
-document.getElementById("availableBooks").textContent =
-books.filter(book => book.status === "Available").length;
+document.getElementById("availableBooks").textContent = books.filter(
+  (book) => book.status === "Available",
+).length;
 
-document.getElementById("borrowedBooks").textContent =
-books.filter(book => book.status === "Borrowed").length;
+document.getElementById("borrowedBooks").textContent = books.filter(
+  (book) => book.status === "Borrowed",
+).length;
 
-const userTable = document.getElementById("userTable");
 
-users.forEach(user => {
+function displayUsers() {
+  const userTable = document.getElementById("userTable");
 
+  userTable.innerHTML = "";
+
+  users.forEach((user, index) => {
     const row = document.createElement("tr");
 
     row.innerHTML = `
-        <td class="border p-2">${user.username}</td>
-    `;
+
+            <td class="border p-3">
+                ${user.username}
+            </td>
+
+            <td class="border p-3">
+                ${user.approved ? "Approved" : "Pending"}
+            </td>
+
+            <td class="border p-3">
+
+                ${
+                  user.approved
+                    ? `
+                    <button
+                        onclick="blockUser(${index})"
+                        class="bg-red-500 text-white px-3 py-1 rounded">
+
+                        Block
+
+                    </button>
+                    `
+                    : `
+                    <button
+                        onclick="approveUser(${index})"
+                        class="bg-green-500 text-white px-3 py-1 rounded">
+
+                        Approve
+
+                    </button>
+                    `
+                }
+
+            </td>
+
+        `;
 
     userTable.appendChild(row);
-
-});
-
-
-
-
-const bookTable = document.getElementById("bookTable");
-
-books.forEach((book,index)=>{
-
-const row=document.createElement("tr");
-
-row.innerHTML=`
-
-<td class="border p-2">${book.bookId}</td>
-
-<td class="border p-2">${book.title}</td>
-
-<td class="border p-2">${book.author}</td>
-
-<td class="border p-2">${book.category}</td>
-
-<td class="border p-2">${book.status}</td>
-
-<td class="border p-2">
-
-<button
-onclick="deleteBook(${index})"
-class="bg-red-500 text-white px-3 py-1 rounded">
-
-Delete
-
-</button>
-
-</td>
-
-`;
-
-bookTable.appendChild(row);
-
-});
-
-
-function deleteUser(index){
-
-users.splice(index,1);
-
-localStorage.setItem("users",JSON.stringify(users));
-
-location.reload();
-
+  });
 }
 
+function approveUser(index) {
+  users[index].approved = true;
 
+  localStorage.setItem("users", JSON.stringify(users));
 
-
-function deleteBook(index){
-
-books.splice(index,1);
-
-localStorage.setItem("books",JSON.stringify(books));
-
-location.reload();
-
+  displayUsers();
 }
 
+function blockUser(index) {
+  users[index].approved = false;
 
+  localStorage.setItem("users", JSON.stringify(users));
 
+  displayUsers();
+}
 
-document.getElementById("logoutBtn").addEventListener("click",()=>{
+// Admin logout
 
-localStorage.removeItem("loggedIn");
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("adminLoggedIn");
 
-localStorage.removeItem("currentUser");
-
-window.location.href="login.html";
-
+  window.location.href = "admin-login.html";
 });
+
+displayUsers();
