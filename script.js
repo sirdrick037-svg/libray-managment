@@ -1,5 +1,5 @@
 if (localStorage.getItem("loggedIn") !== "true") {
-  window.location.href = "login.html";
+  window.location.href = "user-login.html";
 }
 
 const bookForm = document.getElementById("bookForm");
@@ -38,37 +38,51 @@ window.onload = () => {
 function displayBooks(bookArray) {
   bookList.innerHTML = "";
 
-  bookArray.forEach((book, index) => {
+  bookArray.forEach((book) => {
     const row = document.createElement("tr");
 
     row.innerHTML = `
-            <td class="border p-2">${book.bookId}</td>
-            <td class="border p-2">${book.title}</td>
-            <td class="border p-2">${book.author}</td>
-            <td class="border p-2">${book.category}</td>
-            <td class="border p-2">${book.status}</td>
 
-            <td class="border p-2 space-x-2">
+            <td class="border p-2">
+                ${book.bookId}
+            </td>
+
+            <td class="border p-2">
+                ${book.title}
+            </td>
+
+            <td class="border p-2">
+                ${book.author}
+            </td>
+
+            <td class="border p-2">
+                ${book.category}
+            </td>
+
+            <td class="border p-2">
+                ${book.status}
+            </td>
+
+            <td class="border p-2">
 
                 <button
-                    class="bg-blue-500 text-white px-2 py-1 rounded"
-                    onclick="editBook(${index})">
-                    Edit
-                </button>
+                    onclick="toggleStatus(${book.id})"
+                    class="bg-yellow-500 text-white px-3 py-1 rounded">
 
-                <button
-                    class="bg-yellow-500 text-white px-2 py-1 rounded"
-                    onclick="toggleStatus(${index})">
                     ${book.status === "Available" ? "Borrow" : "Return"}
+
                 </button>
 
                 <button
-                    class="bg-red-500 text-white px-2 py-1 rounded"
-                    onclick="deleteBook(${index})">
+                    onclick="deleteBook(${book.id})"
+                    class="bg-red-500 text-white px-3 py-1 rounded">
+
                     Delete
+
                 </button>
 
             </td>
+
         `;
 
     bookList.appendChild(row);
@@ -129,13 +143,28 @@ function editBook(index) {
   displayBooks(books);
 }
 
-function toggleStatus(index) {
-  books[index].status =
-    books[index].status === "Available" ? "Borrowed" : "Available";
+async function toggleStatus(id) {
+  const books = JSON.parse(localStorage.getItem("books")) || [];
 
-  saveBooks();
+  const book = books.find((book) => book.id === id);
 
-  displayBooks(books);
+  if (!book) {
+    return;
+  }
+
+  if (book.status === "Available") {
+    book.status = "Borrowed";
+
+    alert(`"${book.title}" has been borrowed.`);
+  } else {
+    book.status = "Available";
+
+    alert(`"${book.title}" has been returned.`);
+  }
+
+  localStorage.setItem("books", JSON.stringify(books));
+
+  loadBooks();
 }
 
 searchBook.addEventListener("keyup", function () {
@@ -221,7 +250,6 @@ function getCategory(book) {
 
   const title = book.title ? book.title.toLowerCase() : "";
 
-  // Science
   if (
     subjects.includes("science") ||
     subjects.includes("physics") ||
@@ -234,7 +262,6 @@ function getCategory(book) {
     return "Science";
   }
 
-  // Technology
   if (
     subjects.includes("technology") ||
     subjects.includes("computer") ||
@@ -249,7 +276,6 @@ function getCategory(book) {
     return "Technology";
   }
 
-  // History
   if (
     subjects.includes("history") ||
     subjects.includes("historical") ||
@@ -258,7 +284,6 @@ function getCategory(book) {
     return "History";
   }
 
-  
   if (
     subjects.includes("biography") ||
     subjects.includes("autobiography") ||
@@ -267,7 +292,6 @@ function getCategory(book) {
     return "Biography";
   }
 
-  
   if (
     subjects.includes("juvenile") ||
     subjects.includes("children") ||
@@ -275,7 +299,6 @@ function getCategory(book) {
   ) {
     return "Children";
   }
-
 
   return "Fiction";
 }

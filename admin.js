@@ -1,28 +1,115 @@
 
 if (localStorage.getItem("adminLoggedIn") !== "true") {
-  window.location.href = "admin-login.html";
+    window.location.href = "admin-login.html";
 }
 
-const books = JSON.parse(localStorage.getItem("books")) || [];
-
+let books = JSON.parse(localStorage.getItem("books")) || [];
 
 let users = JSON.parse(localStorage.getItem("users")) || [];
 
 
-document.getElementById("totalBooks").textContent = books.length;
+if (localStorage.getItem("registrationAllowed") === null) {
+    localStorage.setItem("registrationAllowed", "true");
+}
 
-document.getElementById("availableBooks").textContent = books.filter(
-  (book) => book.status === "Available",
-).length;
+if (localStorage.getItem("loginAllowed") === null) {
+    localStorage.setItem("loginAllowed", "true");
+}
 
-document.getElementById("borrowedBooks").textContent = books.filter(
-  (book) => book.status === "Borrowed",
-).length;
+function updateStatistics() {
 
+    document.getElementById("totalBooks").textContent =
+        books.length;
+
+    document.getElementById("availableBooks").textContent =
+        books.filter(book => book.status === "Available").length;
+
+    document.getElementById("borrowedBooks").textContent =
+        books.filter(book => book.status === "Borrowed").length;
+}
+
+const registrationBtn =
+    document.getElementById("registrationBtn");
+
+const loginBtn =
+    document.getElementById("loginBtn");
+
+
+function updateAccessButtons() {
+
+    const registrationAllowed =
+        localStorage.getItem("registrationAllowed") === "true";
+
+    const loginAllowed =
+        localStorage.getItem("loginAllowed") === "true";
+
+
+    if (registrationAllowed) {
+
+        registrationBtn.textContent = "Enabled";
+
+        registrationBtn.className =
+            "bg-green-500 text-white px-4 py-2 rounded";
+
+    } else {
+
+        registrationBtn.textContent = "Disabled";
+
+        registrationBtn.className =
+            "bg-red-500 text-white px-4 py-2 rounded";
+
+    }
+
+    if (loginAllowed) {
+
+        loginBtn.textContent = "Enabled";
+
+        loginBtn.className =
+            "bg-green-500 text-white px-4 py-2 rounded";
+
+    } else {
+
+        loginBtn.textContent = "Disabled";
+
+        loginBtn.className =
+            "bg-red-500 text-white px-4 py-2 rounded";
+
+    }
+
+}
+
+registrationBtn.addEventListener("click", () => {
+
+    const current =
+        localStorage.getItem("registrationAllowed") === "true";
+
+    localStorage.setItem(
+        "registrationAllowed",
+        String(!current)
+    );
+
+    updateAccessButtons();
+
+});
+
+loginBtn.addEventListener("click", () => {
+
+    const current =
+        localStorage.getItem("loginAllowed") === "true";
+
+    localStorage.setItem(
+        "loginAllowed",
+        String(!current)
+    );
+
+    updateAccessButtons();
+
+});
 
 function displayUsers() {
 
-    const userTable = document.getElementById("userTable");
+    const userTable =
+        document.getElementById("userTable");
 
     userTable.innerHTML = "";
 
@@ -37,21 +124,48 @@ function displayUsers() {
             </td>
 
             <td class="border p-3">
-                ${user.approved ? "Approved" : "Pending"}
+                ${
+                    user.approved
+                        ? "Approved"
+                        : "Pending"
+                }
             </td>
 
-            <td class="border p-3">
+            <td class="border p-3 space-x-2">
+
+                ${
+                    user.approved
+
+                    ?
+
+                    `<button
+                        onclick="blockUser(${index})"
+                        class="bg-yellow-500 text-white px-3 py-1 rounded">
+
+                        Block
+
+                    </button>`
+
+                    :
+
+                    `<button
+                        onclick="approveUser(${index})"
+                        class="bg-green-500 text-white px-3 py-1 rounded">
+
+                        Approve
+
+                    </button>`
+                }
 
                 <button
                     onclick="deleteUser(${index})"
-                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                    class="bg-red-500 text-white px-3 py-1 rounded">
 
                     Delete
 
                 </button>
 
             </td>
-
         `;
 
         userTable.appendChild(row);
@@ -60,11 +174,39 @@ function displayUsers() {
 
 }
 
+function approveUser(index) {
+
+    users[index].approved = true;
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(users)
+    );
+
+    displayUsers();
+
+}
+
+
+
+
+function blockUser(index) {
+
+    users[index].approved = false;
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(users)
+    );
+
+    displayUsers();
+
+}
+
 function deleteUser(index) {
 
     const user = users[index];
 
-    // Don't allow deleting the admin
     if (user.username === "admin") {
 
         alert("You cannot delete the administrator.");
@@ -72,11 +214,7 @@ function deleteUser(index) {
         return;
     }
 
-    const confirmDelete = confirm(
-        `Delete user "${user.username}"?`
-    );
-
-    if (!confirmDelete) {
+    if (!confirm(`Delete ${user.username}?`)) {
         return;
     }
 
@@ -91,28 +229,20 @@ function deleteUser(index) {
 
 }
 
-function approveUser(index) {
-  users[index].approved = true;
 
-  localStorage.setItem("users", JSON.stringify(users));
+document
+    .getElementById("logoutBtn")
+    ?.addEventListener("click", () => {
 
-  displayUsers();
-}
+        localStorage.removeItem("adminLoggedIn");
 
-function blockUser(index) {
-  users[index].approved = false;
+        window.location.href =
+            "admin-login.html";
 
-  localStorage.setItem("users", JSON.stringify(users));
+    });
 
-  displayUsers();
-}
+updateStatistics();
 
-// Admin logout
-
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("adminLoggedIn");
-
-  window.location.href = "admin-login.html";
-});
+updateAccessButtons();
 
 displayUsers();

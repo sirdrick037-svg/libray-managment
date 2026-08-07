@@ -1,3 +1,11 @@
+// Check whether admin allows login
+
+if (localStorage.getItem("loginAllowed") !== "true") {
+  alert("User login is currently disabled by the administrator.");
+
+  window.location.href = "landing.html";
+}
+
 const loginBtn = document.getElementById("loginBtn");
 
 loginBtn.addEventListener("click", () => {
@@ -18,12 +26,16 @@ loginBtn.addEventListener("click", () => {
     return;
   }
 
+  // Check admin approval
+
   if (!user.approved) {
     document.getElementById("message").textContent =
       "Your account is waiting for admin approval.";
 
     return;
   }
+
+  // Login
 
   localStorage.setItem("loggedIn", "true");
 
