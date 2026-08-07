@@ -64,17 +64,13 @@
           required
         />
 
-        <select id="category" class="border rounded p-2" required>
-          <option value="">Select Category</option>
-          <option value="Fiction">Fiction</option>
-          <option value="Science">Science</option>
-          <option value="Technology">Technology</option>
-          <option value="History">History</option>
-          <option value="Biography">Politics</option>
-          <option value="Children">Children</option>
-          <option value="Mystery">Mystery</option>
-          <option value="Romance">Romance</option>
-        </select>
+        <input
+    type="text"
+    id="category"
+    placeholder="Category"
+    class="border rounded p-2"
+    readonly
+>
 
         <select id="status" class="border rounded p-2">
           <option value="Available">Available</option>
@@ -103,7 +99,7 @@
               <th class="p-3">Book ID</th>
               <th class="p-3">Title</th>
               <th class="p-3">Author</th>
-              <th class="p-3">category</th>
+              <th class="p-3">Category</th>
               <th class="p-3">Status</th>
               <th class="p-3">Actions</th>
             </tr>

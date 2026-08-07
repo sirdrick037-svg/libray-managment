@@ -1,4 +1,3 @@
-
 if (localStorage.getItem("loggedIn") !== "true") {
   window.location.href = "login.html";
 }
@@ -22,23 +21,16 @@ const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 const adminBtn = document.getElementById("adminBtn");
 
 if (currentUser.role === "admin") {
-
-    adminBtn.style.display = "block";
-
+  adminBtn.style.display = "block";
 } else {
-
-    adminBtn.style.display = "none";
-
+  adminBtn.style.display = "none";
 }
 
 adminBtn.addEventListener("click", () => {
-
-    window.location.href = "admin.html";
-
+  window.location.href = "admin.html";
 });
 
 let books = JSON.parse(localStorage.getItem("books")) || [];
-
 
 window.onload = () => {
   displayBooks(books);
@@ -85,11 +77,9 @@ function displayBooks(bookArray) {
   updateSummary();
 }
 
-
 function saveBooks() {
   localStorage.setItem("books", JSON.stringify(books));
 }
-
 
 bookForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -110,7 +100,6 @@ bookForm.addEventListener("submit", function (e) {
 
   bookForm.reset();
 });
-
 
 function deleteBook(index) {
   books.splice(index, 1);
@@ -149,7 +138,6 @@ function toggleStatus(index) {
   displayBooks(books);
 }
 
-
 searchBook.addEventListener("keyup", function () {
   const search = this.value.toLowerCase();
 
@@ -163,7 +151,6 @@ searchBook.addEventListener("keyup", function () {
   displayBooks(filtered);
 });
 
-
 function updateSummary() {
   totalBooks.textContent = books.length;
 
@@ -176,7 +163,6 @@ function updateSummary() {
   ).length;
 }
 
-
 clearLibrary.addEventListener("click", () => {
   if (!confirm("Delete all books?")) return;
 
@@ -186,7 +172,6 @@ clearLibrary.addEventListener("click", () => {
 
   displayBooks(books);
 });
-
 
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("loggedIn");
@@ -221,25 +206,76 @@ searchApiBtn.addEventListener("click", async () => {
     document.getElementById("author").value = book.author_name
       ? book.author_name[0]
       : "";
+    const category = getCategory(book);
 
-    if (book.subject && book.subject.length > 0) {
-      const subject = book.subject[0];
-
-      if (subject.includes("Science")) {
-        document.getElementById("category").value = "Science";
-      } else if (subject.includes("History")) {
-        document.getElementById("category").value = "History";
-      } else if (subject.includes("Technology")) {
-        document.getElementById("category").value = "Technology";
-      } else if (subject.includes("Biography")) {
-        document.getElementById("category").value = "Biography";
-      } else if (subject.includes("Children")) {
-        document.getElementById("category").value = "Children";
-      } else {
-        document.getElementById("category").value = "Fiction";
-      }
-    }
+    document.getElementById("category").value = category;
   } catch (error) {
-    alert("Unable to connect to Open Library API.");
+    console.error(error);
+
+    alert("Unable to search for the book.");
   }
 });
+
+function getCategory(book) {
+  const subjects = book.subject ? book.subject.join(" ").toLowerCase() : "";
+
+  const title = book.title ? book.title.toLowerCase() : "";
+
+  // Science
+  if (
+    subjects.includes("science") ||
+    subjects.includes("physics") ||
+    subjects.includes("chemistry") ||
+    subjects.includes("biology") ||
+    title.includes("physics") ||
+    title.includes("chemistry") ||
+    title.includes("biology")
+  ) {
+    return "Science";
+  }
+
+  // Technology
+  if (
+    subjects.includes("technology") ||
+    subjects.includes("computer") ||
+    subjects.includes("programming") ||
+    subjects.includes("software") ||
+    subjects.includes("engineering") ||
+    title.includes("programming") ||
+    title.includes("computer") ||
+    title.includes("javascript") ||
+    title.includes("python")
+  ) {
+    return "Technology";
+  }
+
+  // History
+  if (
+    subjects.includes("history") ||
+    subjects.includes("historical") ||
+    title.includes("history")
+  ) {
+    return "History";
+  }
+
+  
+  if (
+    subjects.includes("biography") ||
+    subjects.includes("autobiography") ||
+    subjects.includes("memoir")
+  ) {
+    return "Biography";
+  }
+
+  
+  if (
+    subjects.includes("juvenile") ||
+    subjects.includes("children") ||
+    subjects.includes("child")
+  ) {
+    return "Children";
+  }
+
+
+  return "Fiction";
+}
