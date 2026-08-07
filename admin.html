@@ -23,64 +23,85 @@
       </head>
 
       <body class="bg-gray-100">
-        <div class="max-w-6xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
-          <h1 class="text-4xl font-bold text-center text-purple-600 mb-8">
+        <div class="max-w-5xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+        
+          <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
             Admin Dashboard
           </h1>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-blue-500 text-white p-6 rounded-lg text-center">
               <h2 class="text-xl font-bold">Total Books</h2>
-
-              <p id="totalBooks" class="text-4xl mt-3">0</p>
+              <p id="totalBooks" class="text-4xl mt-4">0</p>
             </div>
 
             <div class="bg-green-500 text-white p-6 rounded-lg text-center">
               <h2 class="text-xl font-bold">Available</h2>
-
-              <p id="availableBooks" class="text-4xl mt-3">0</p>
+              <p id="availableBooks" class="text-4xl mt-4">0</p>
             </div>
 
             <div class="bg-red-500 text-white p-6 rounded-lg text-center">
               <h2 class="text-xl font-bold">Borrowed</h2>
-
-              <p id="borrowedBooks" class="text-4xl mt-3">0</p>
+              <p id="borrowedBooks" class="text-4xl mt-4">0</p>
             </div>
           </div>
 
-          <h2 class="text-2xl font-bold mb-4">User Management</h2>
+          <div class="mt-8 bg-gray-100 p-6 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4">User Access Control</h2>
 
-          <table class="w-full border mb-8">
-            <thead class="bg-purple-600 text-white">
-              <tr>
-                <th class="border p-3">Username</th>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-semibold"> Allow User Registration </span>
 
-                <th class="border p-3">Status</th>
+              <button
+                id="registrationBtn"
+                class="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                Enabled
+              </button>
+            </div>
 
-                <th class="border p-3">Action</th>
-              </tr>
-            </thead>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold"> Allow User Login </span>
 
-            <tbody id="userTable"></tbody>
-          </table>
+              <button
+                id="loginBtn"
+                class="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                Enabled
+              </button>
+            </div>
+          </div>
 
-          <div class="flex gap-4">
-            <button
-              id="logoutBtn"
-              class="bg-red-500 text-white px-6 py-2 rounded"
-            >
-              Admin Logout
-            </button>
+          <div class="mt-10">
+            <h2 class="text-2xl font-bold mb-4">Registered Users</h2>
 
+            <table class="w-full border">
+              <thead class="bg-blue-500 text-white">
+                <tr>
+                  <th class="p-3">Username</th>
+
+                  <th class="p-3">Status</th>
+
+                  <th class="p-3">Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="userTable"></tbody>
+            </table>
+          </div>
+
+          <!-- Back to Library -->
+
+          <div class="mt-8 text-center">
             <a href="index.html">
-              <button class="bg-blue-500 text-white px-6 py-2 rounded">
-                Library
+              <button
+                class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+              >
+                Back to Library
               </button>
             </a>
           </div>
         </div>
-
-        <script src="admin.js"></script>
       </body>
     </html>
   </body>

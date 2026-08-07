@@ -21,14 +21,16 @@ document.getElementById("borrowedBooks").textContent = books.filter(
 
 
 function displayUsers() {
-  const userTable = document.getElementById("userTable");
 
-  userTable.innerHTML = "";
+    const userTable = document.getElementById("userTable");
 
-  users.forEach((user, index) => {
-    const row = document.createElement("tr");
+    userTable.innerHTML = "";
 
-    row.innerHTML = `
+    users.forEach((user, index) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
 
             <td class="border p-3">
                 ${user.username}
@@ -40,34 +42,53 @@ function displayUsers() {
 
             <td class="border p-3">
 
-                ${
-                  user.approved
-                    ? `
-                    <button
-                        onclick="blockUser(${index})"
-                        class="bg-red-500 text-white px-3 py-1 rounded">
+                <button
+                    onclick="deleteUser(${index})"
+                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
 
-                        Block
+                    Delete
 
-                    </button>
-                    `
-                    : `
-                    <button
-                        onclick="approveUser(${index})"
-                        class="bg-green-500 text-white px-3 py-1 rounded">
-
-                        Approve
-
-                    </button>
-                    `
-                }
+                </button>
 
             </td>
 
         `;
 
-    userTable.appendChild(row);
-  });
+        userTable.appendChild(row);
+
+    });
+
+}
+
+function deleteUser(index) {
+
+    const user = users[index];
+
+    // Don't allow deleting the admin
+    if (user.username === "admin") {
+
+        alert("You cannot delete the administrator.");
+
+        return;
+    }
+
+    const confirmDelete = confirm(
+        `Delete user "${user.username}"?`
+    );
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    users.splice(index, 1);
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(users)
+    );
+
+    displayUsers();
+
 }
 
 function approveUser(index) {
